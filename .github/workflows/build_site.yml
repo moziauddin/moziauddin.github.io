@@ -15,8 +15,8 @@ jobs:
       id: buildsite
       uses: avattathil/asciidoctor-action@master
       with:
-          program: "asciidoctor -D docs -a linkcss -a stylesdir=css -a stylesheet=styles.css -a copycss=`pwd`/css/styles.css --backend=html5 -o index.html index.ad"
-    - name: Deploy docs to ghpages
+          program: "asciidoctor -a linkcss -a stylesdir=css -a stylesheet=styles.css -a copycss=`pwd`/css/styles.css --backend=html5 -o index.html index.ad"
+    - name: Deploy to ghpages
       uses: peaceiris/actions-gh-pages@v3
       with: 
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
