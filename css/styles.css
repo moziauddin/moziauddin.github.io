@@ -22,7 +22,7 @@ a {
 }
 
 #header {
-	background-color: LightGrey;
+	background-color: MediumPurple;
 	grid-area: nav;
 }
 
@@ -96,4 +96,9 @@ td, th {
 th {
 	background-color: WhiteSmoke;
 	text-align: left;
+}
+
+#footer {
+    background-color: MediumPurple;
+    color: ;
 }
