@@ -235,12 +235,12 @@ div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,
 	direction:ltr
 }
 a{
-	color:#2156a5;
+	color:LightSeaGreen;
 	text-decoration:underline;
 	line-height:inherit
 }
 a:hover,a:focus{
-	color:#1d4b8f
+	color:ForestGreen
 }
 a img{
 	border:none
