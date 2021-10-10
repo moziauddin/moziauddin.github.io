@@ -1,0 +1,19 @@
+////
+ file: index.ad
+ author: Mo Ziauddin
+
+////
+
+= Welcome to Mo's blog
+:stylesheet: styles.css
+:stylesdir: css
+:toc: right
+:toc-title: Jump to Section
+
+== About Me
+
+This is where I share my technical journey, knowledge and technologies I currently work on. 
+
+== Social
+
+https://twitter.com/moziauddin[Twitter] <:> https://github.com/moziauddin[Github] <:> https://www.youtube.com/channel/UCLIfTvYgXPAq6810iP7W7kg[YouTube]
