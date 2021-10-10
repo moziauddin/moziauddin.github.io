@@ -237,10 +237,13 @@ div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,
 a{
 	color:LightSeaGreen;
 	text-decoration:underline;
+	font-weight: bold;
 	line-height:inherit
 }
 a:hover,a:focus{
 	color:ForestGreen
+	font-style: italic;
+	font-weight: normal;
 }
 a img{
 	border:none
