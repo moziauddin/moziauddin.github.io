@@ -6,6 +6,10 @@ body {
 	margin: 0;
 }
 
+.element > %headings {
+    color: Indigo;
+}
+
 .article {
 	display: grid;
 	grid-template-areas: "nav content";
@@ -18,7 +22,7 @@ a {
 }
 
 #header {
-	background-color: #444;
+	background-color: LightGrey;
 	grid-area: nav;
 }
 
@@ -46,23 +50,23 @@ a {
 
 #toctitle {
 	font-weight: bold;
-	color: white;
+	color: Lavender;
 }
 
 h1 {
 	font-size: 1.4em;
-	background-color: black;
+	background-color: Indigo;
 	padding: .6em;
 	margin: 0;
-	color: white;
+	color: Lavender;
 }
 
 #toc a:hover {
-	background-color: maroon;
+	color: Moccasin;
 }
 
 #content {
-	background-color: white;
+	background-color: WhiteSmoke;
 	grid-area: content;
 	max-width: 1000px;
 	padding: 1em;
@@ -74,7 +78,7 @@ h1 {
 }
 
 pre {
-	background-color: #f7f7f8;
+	background-color: WhiteSmoke;
 	padding: 1em;
 	word-wrap: break-word;
 	white-space: pre-wrap;
@@ -90,6 +94,6 @@ td, th {
 }
 
 th {
-	background-color: #f9f9f9;
+	background-color: WhiteSmoke;
 	text-align: left;
 }
