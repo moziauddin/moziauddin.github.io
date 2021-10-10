@@ -7,7 +7,7 @@
 = Welcome to Mo's blog
 :stylesheet: styles.css
 :stylesdir: css
-:toc: right
+:toc: left
 :toc-title: Jump to Section
 
 == About Me
