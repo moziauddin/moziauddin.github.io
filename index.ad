@@ -5,27 +5,14 @@
 ////
 
 = Welcome to Mo's blog
-// Metadata
-:description: This a technology blog where I discuss java, groovy, grails, postgresql, devops, jenkins, aws, terraform, bash and many other technologies.
-:keywords: tech articles, java, groovy, grails, micronaut, jenkins, DSL, Postgres, Cybersecurity
-// Stylesheets
 :stylesheet: styles.css
 :stylesdir: css
-// Doc Options
-:sectnums:
-:toc: left  // table of contents
+:toc: left
 :toc-title: Jump to Section
 :icons: font
 
-== About
+== About Me
 
-=== About this blog
-
-xref:blog.ad[blog-home]
-
-{description}
-
-=== About Me
 I am Mo. I live in the land down under (also called the _Great Southern Land_) in _my island home_.
 I am a Computer Science student and work with a range of technologies.
 This is where I share my journey, knowledge and stuff I currently work on.
@@ -54,12 +41,3 @@ Expect delays in response if I am working on anything important.
 
 [quote, Albert Einstein]
 A person who never made a mistake never tried anything new.
-
-== Support Me
-
-You can support me by
-
-. contributing to my projects
-. help with documentation
-. help with content development
-. donate
