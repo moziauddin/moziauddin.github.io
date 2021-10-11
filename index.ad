@@ -5,15 +5,9 @@
 ////
 
 = Welcome to Mo's blog
-// Metadata
-:description: This a technology blog where I discuss java, groovy, grails, postgresql, devops, jenkins, aws, terraform, bash and many other technologies.
-:keywords: tech articles, java, groovy, grails, micronaut, jenkins, DSL, Postgres, Cybersecurity
-// Stylesheets
 :stylesheet: styles.css
 :stylesdir: css
-// Doc Options
-:sectnums:
-:toc: left  // table of contents
+:toc: left
 :toc-title: Jump to Section
 :icons: font
 
@@ -47,13 +41,3 @@ Expect delays in response if I am working on anything important.
 
 [quote, Albert Einstein]
 A person who never made a mistake never tried anything new.
-
-
-== Support Me
-
-You can support me by
-
-. contributing to my projects
-. help with documentation
-. help with content development
-. donate
