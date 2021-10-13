@@ -4,16 +4,14 @@
 
 ////
 
-= Welcome to Mo's blog
+= Contact Me
 :stylesheet: styles.css
 :stylesdir: css
 :toc: left
-:toc-title: Categories
+:toc-title: Contact Ud
 :icons: font
 
-[options="header"]
-|===
-|<<about.ad#,Home icon:home[]>>|<<index.ad#,Blog>>|<<contact.ad#,Contact icon:phone[]>>
-|===
+include::header.ad[]
+
 [.right.text-center]
 icon:snowflake-o[5x, role=Maroon]
