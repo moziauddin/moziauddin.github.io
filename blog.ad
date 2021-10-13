@@ -1,6 +1,0 @@
-= Welcome to my blog
-ifdef::env-name[:relfilesuffix: .ad]
-
-See the xref:README.adoc[README].
-
-We could also write the link as link:README{relfilesuffix}[README].

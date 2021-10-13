@@ -248,6 +248,9 @@ a:hover,a:focus{
 a img{
 	border:none
 }
+.fa {
+	color: #d5ffcf;
+}
 p{
 	font-family:inherit;
 	font-weight:400;

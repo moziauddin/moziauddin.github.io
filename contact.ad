@@ -1,0 +1,19 @@
+////
+ file: contact.ad
+ author: Mo Ziauddin
+
+////
+
+= Welcome to Mo's blog
+:stylesheet: styles.css
+:stylesdir: css
+:toc: left
+:toc-title: Categories
+:icons: font
+
+[options="header"]
+|===
+|<<about.ad#,Home icon:home[]>>|<<index.ad#,Blog>>|<<contact.ad#,Contact icon:phone[]>>
+|===
+[.right.text-center]
+icon:snowflake-o[5x, role=Maroon]
