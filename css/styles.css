@@ -243,7 +243,6 @@ a{
 }
 a:hover,a:focus{
 	color:ForestGreen;
-	font-style: italic;
 	font-weight: normal;
 }
 a img{

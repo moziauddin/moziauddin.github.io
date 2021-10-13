@@ -11,6 +11,13 @@
 :toc-title: Jump to Section
 :icons: font
 
+[options="header"]
+|===
+|<<about.ad#,Home icon:home[]>>|<<blog.ad#,Blog>>|<<contact.ad#,Contact icon:phone[]>>
+|===
+[.right.text-center]
+icon:snowflake-o[5x, role=Maroon]
+
 == About Me
 
 I am Mo. I live in the land down under (also called the _Great Southern Land_) in _my island home_.
@@ -49,4 +56,9 @@ You can support me by
 . contributing to my projects
 . help with documentation
 . help with content development
-. donate
+. donate to https://mo-it.com.au[Mo IT]
+
+[.center.text-center]
+----
+Built using asciidoc
+----
