@@ -1,0 +1,14 @@
+////
+ file: contact.ad
+ author: Mo Ziauddin
+
+////
+
+:icons: font
+
+[options="header"]
+|===
+|<<about.ad#,Home icon:home[]>>|<<index.ad#,Blog icon:university[]>>|<<contact.ad#,Contact icon:phone[]>>
+|===
+[.right.text-center]
+icon:snowflake-o[5x, role=Maroon]
