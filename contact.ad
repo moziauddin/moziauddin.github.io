@@ -8,7 +8,8 @@
 :stylesheet: styles.css
 :stylesdir: css
 :toc: left
-:toc-title: Contact Ud
+:toc-title: Contact Us
 :icons: font
 
-include::header.ad[]
+[.center.text-center]
+include::footer.ad[]
