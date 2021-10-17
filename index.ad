@@ -13,9 +13,6 @@
 
 include::header.ad[]
 
-[.right.text-center]
-icon:snowflake-o[5x, role=Maroon]
-
 == Grails
 
 == Micronaut
@@ -29,3 +26,6 @@ icon:snowflake-o[5x, role=Maroon]
 == Jenkins
 
 == Bash
+
+[.center.text-center]
+include::footer.ad[]
