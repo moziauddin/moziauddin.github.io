@@ -1,0 +1,175 @@
+////
+ file: about.ad
+ author: Mo Ziauddin
+
+////
+
+= About
+:stylesheet: styles.css
+:stylesdir: css
+:toc: left
+:toc-title: Jump to Section
+:icons: font
+
+include::../header.ad[]
+
+== Comparing PostgreSQL hstore Timestamps From Different Timezones Using Groovy
+
+=== Introduction
+
+We have an audit table to track changes to data in few domain objects and it has a timestamp field which looks like postgres timestamp. The key fields to note in the below table for the purpose of this demonstration are `row_data` which is a `h_store` type and `action_tstamp_tx` which is a timestamp
+
+=== Background
+
+As you can see from the above snippet, there are two fields with a SQL timestamp in them. They are:
+
+. `action_tstamp_tx` field in the audit table
+. `updated_at` key in the `row_data` hstore
+
+The table definition (structure) and a sample row from that table are as below...
+
+==== Audit Table Definition
+
+[source,sql]
+----
+      Column       |           Type           | Collation | Nullable    
+------------------------------------------------------------------
+ event_id          | bigint                   |           | not null | serial
+ schema_name       | text                     |           | not null | 
+ table_name        | text                     |           | not null | 
+ relid             | oid                      |           | not null | 
+ session_user_name | text                     |           |          | 
+ action_tstamp_tx  | timestamp with time zone |           | not null | 
+ transaction_id    | bigint                   |           |          | 
+ client_query      | text                     |           |          | 
+ action            | text                     |           | not null | 
+ row_data          | hstore                   |           |          | 
+----
+
+==== One Sample Record from audit table
+
+[source,sql]
+----
+event_id          | 22002200
+schema_name       | public
+table_name        | employee
+relid             | 22222
+session_user_name | dbuser
+action_tstamp_tx  | 2021-10-30 12:28:48.357863+10
+transaction_id    | 2202
+client_query      | UPDATE "employee" SET "employer_id" = $1, "updated_at" = $2, "lock_version" = $3 WHERE "employee"."id" = $4 AND "employee"."lock_version" = $5
+action            | U
+row_data          | "id"=>"4654", [some data], "created_at"=>"2009-10-29 03:30:08+00", [some data] , "updated_at"=>"2021-10-29 06:09:46.126923+00", [some data]
+----
+
+=== The problem
+
+There are many processes that update our domain objects. So, I want to filter out the updates that do not update the `updated_by` field from the ones that do. I would like to compare the `updated_at` field with the `action_tstamp_tx` to check if they are the same. But as you might have noticed they are not from the same time-zone. 
+
+`action_tstamp_tx` ends with *+10* in `2021-10-30 12:28:48.357863+10` which means they are in AEST timezone where as `updated_at` ends with *+00* in `2021-10-29 06:09:46.126923+00` which means thats GMT. 
+
+[CAUTION]
+How can we compare the two dates in different timezones
+
+=== Solution
+
+Luckily for us, we use Groovy.
+
+We can use the below code to convert different SQL timetamps to GMT for the purpose of comparison.
+
+==== Trial Code
+
+link:https://onecompiler.com/groovy/3xg23fzyk[Try It on OneCompiler]
+
+[source,groovy]
+----
+newDates = []
+def dates = [
+    '2021-10-30 12:33:20.255091+10',
+    '2021-10-19 02:33:20.214293+00',
+    '2021-10-11 13:33:20.214293+09',
+    '2021-10-22 01:33:20.214293+04'
+    ]
+dates.each {
+    offset = it.split('\\+')[1]
+    def date = Date.parse("yyyy-MM-dd HH:mm:ss", it)
+    use( groovy.time.TimeCategory ) {
+        newDate = date - offset.toInteger().hours
+    }
+    newDates << newDate
+}
+println newDates
+----
+
+[NOTE]
+I am discarding the millisecond part of the string as it causes an issue with the parsing
+
+We can use the above code to build a function that either:
+
+- asserts the two dates are same [OR]
+- Returns a boolean result of comparison
+
+link:https://onecompiler.com/groovy/3xg23mzzm[Try The Function Out on OneCompiler]
+
+[source,groovy]
+----
+Boolean compareDatesInDiffTz(String d1, String d2) {
+    newDates = []
+    List dates = []
+    dates << d1 
+    dates << d2
+    dates.each {
+        offset = it.split('\\+')[1]
+        def date = Date.parse("yyyy-MM-dd HH:mm:ss", it)
+        use( groovy.time.TimeCategory ) {
+            newDate = date - offset.toInteger().hours
+        }
+        newDates << newDate
+    }
+    return newDates[0] == newDates[1]
+}
+
+println compareDatesInDiffTz('2021-10-30 12:33:20.255091+10', '2021-10-30 02:33:20.255091+00')
+println compareDatesInDiffTz('2021-10-30 12:33:20.255091+10', '2021-10-30 12:33:20.255091+00')
+----
+
+The above code should print the below output
+
+[source,bash]
+----
+mo@localhost> groovy ./sql-date-issue.groovy 
+
+true
+false
+----
+
+If you replace the `return` keyword with `assert`, then the output should look like below.
+
+link:https://onecompiler.com/groovy/3xg23mzzm[Play with it now!]
+
+[source,groovy]
+----
+mo@localhost> groovy ./sql-date-issue.groovy 
+Caught: Assertion failed: 
+
+assert newDates[0] == newDates[1]
+       |       |   |  |       |
+       |       |   |  |       Sat Oct 30 12:33:20 AEDT 2021
+       |       |   |  [Sat Oct 30 02:33:20 AEDT 2021, Sat Oct 30 12:33:20 AEDT 2021]
+       |       |   false
+       |       Sat Oct 30 02:33:20 AEDT 2021
+       [Sat Oct 30 02:33:20 AEDT 2021, Sat Oct 30 12:33:20 AEDT 2021]
+
+Assertion failed: 
+
+assert newDates[0] == newDates[1]
+       |       |   |  |       |
+       |       |   |  |       Sat Oct 30 12:33:20 AEDT 2021
+       |       |   |  [Sat Oct 30 02:33:20 AEDT 2021, Sat Oct 30 12:33:20 AEDT 2021]
+       |       |   false
+       |       Sat Oct 30 02:33:20 AEDT 2021
+       [Sat Oct 30 02:33:20 AEDT 2021, Sat Oct 30 12:33:20 AEDT 2021]
+
+        at sql-date-issue.compareDatesInDiffTz(sql-date-issue.groovy:20)
+        at sql-date-issue.run(sql-date-issue.groovy:24)
+----
