@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.16">
+<title>About</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>About</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Jump to Section</div>
+<ul class="sectlevel1">
+<li><a href="#_comparing_postgresql_hstore_timestamps_from_different_timezones_using_groovy">Comparing PostgreSQL hstore Timestamps From Different Timezones Using Groovy</a>
+<ul class="sectlevel2">
+<li><a href="#_introduction">Introduction</a></li>
+<li><a href="#_background">Background</a></li>
+<li><a href="#_the_problem">The problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><a href="about.html">Home <span class="icon"><i class="fa fa-home"></i></span></a></th>
+<th class="tableblock halign-left valign-top"><a href="index.html">Blog <span class="icon"><i class="fa fa-university"></i></span></a></th>
+<th class="tableblock halign-left valign-top"><a href="contact.html">Contact <span class="icon"><i class="fa fa-phone"></i></span></a></th>
+</tr>
+</thead>
+</table>
+<div class="paragraph right text-center">
+<p><span class="icon Maroon"><i class="fa fa-snowflake-o fa-5x"></i></span></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comparing_postgresql_hstore_timestamps_from_different_timezones_using_groovy">Comparing PostgreSQL hstore Timestamps From Different Timezones Using Groovy</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_introduction">Introduction</h3>
+<div class="paragraph">
+<p>We have an audit table to track changes to data in few domain objects and it has a timestamp field which looks like postgres timestamp. The key fields to note in the below table for the purpose of this demonstration are <code>row_data</code> which is a <code>h_store</code> type and <code>action_tstamp_tx</code> which is a timestamp</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_background">Background</h3>
+<div class="paragraph">
+<p>As you can see from the above snippet, there are two fields with a SQL timestamp in them. They are:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>action_tstamp_tx</code> field in the audit table</p>
+</li>
+<li>
+<p><code>updated_at</code> key in the <code>row_data</code> hstore</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The table definition (structure) and a sample row from that table are as below&#8230;&#8203;</p>
+</div>
+<div class="sect3">
+<h4 id="_audit_table_definition">Audit Table Definition</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-sql" data-lang="sql">      Column       |           Type           | Collation | Nullable
+------------------------------------------------------------------
+ event_id          | bigint                   |           | not null | serial
+ schema_name       | text                     |           | not null |
+ table_name        | text                     |           | not null |
+ relid             | oid                      |           | not null |
+ session_user_name | text                     |           |          |
+ action_tstamp_tx  | timestamp with time zone |           | not null |
+ transaction_id    | bigint                   |           |          |
+ client_query      | text                     |           |          |
+ action            | text                     |           | not null |
+ row_data          | hstore                   |           |          |</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_one_sample_record_from_audit_table">One Sample Record from audit table</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-sql" data-lang="sql">event_id          | 22002200
+schema_name       | public
+table_name        | employee
+relid             | 22222
+session_user_name | dbuser
+action_tstamp_tx  | 2021-10-30 12:28:48.357863+10
+transaction_id    | 2202
+client_query      | UPDATE "employee" SET "employer_id" = $1, "updated_at" = $2, "lock_version" = $3 WHERE "employee"."id" = $4 AND "employee"."lock_version" = $5
+action            | U
+row_data          | "id"=&gt;"4654", [some data], "created_at"=&gt;"2009-10-29 03:30:08+00", [some data] , "updated_at"=&gt;"2021-10-29 06:09:46.126923+00", [some data]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_problem">The problem</h3>
+<div class="paragraph">
+<p>There are many processes that update our domain objects. So, I want to filter out the updates that do not update the <code>updated_by</code> field from the ones that do. I would like to compare the <code>updated_at</code> field with the <code>action_tstamp_tx</code> to check if they are the same. But as you might have noticed they are not from the same time-zone.</p>
+</div>
+<div class="paragraph">
+<p><code>action_tstamp_tx</code> ends with <strong>+10</strong> in <code>2021-10-30 12:28:48.357863+10</code> which means they are in AEST timezone where as <code>updated_at</code> ends with <strong>+00</strong> in <code>2021-10-29 06:09:46.126923+00</code> which means thats GMT.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+How can we compare the two dates in different timezones
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_solution">Solution</h3>
+<div class="paragraph">
+<p>Luckily for us, we use Groovy.</p>
+</div>
+<div class="paragraph">
+<p>We can use the below code to convert different SQL timetamps to GMT for the purpose of comparison.</p>
+</div>
+<div class="sect3">
+<h4 id="_trial_code">Trial Code</h4>
+<div class="paragraph">
+<p><a href="https://onecompiler.com/groovy/3xg23fzyk">Try It on OneCompiler</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">newDates = []
+def dates = [
+    '2021-10-30 12:33:20.255091+10',
+    '2021-10-19 02:33:20.214293+00',
+    '2021-10-11 13:33:20.214293+09',
+    '2021-10-22 01:33:20.214293+04'
+    ]
+dates.each {
+    offset = it.split('\\+')[1]
+    def date = Date.parse("yyyy-MM-dd HH:mm:ss", it)
+    use( groovy.time.TimeCategory ) {
+        newDate = date - offset.toInteger().hours
+    }
+    newDates &lt;&lt; newDate
+}
+println newDates</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+I am discarding the millisecond part of the string as it causes an issue with the parsing
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We can use the above code to build a function that either:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>asserts the two dates are same [OR]</p>
+</li>
+<li>
+<p>Returns a boolean result of comparison</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><a href="https://onecompiler.com/groovy/3xg23mzzm">Try The Function Out on OneCompiler</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">Boolean compareDatesInDiffTz(String d1, String d2) {
+    newDates = []
+    List dates = []
+    dates &lt;&lt; d1
+    dates &lt;&lt; d2
+    dates.each {
+        offset = it.split('\\+')[1]
+        def date = Date.parse("yyyy-MM-dd HH:mm:ss", it)
+        use( groovy.time.TimeCategory ) {
+            newDate = date - offset.toInteger().hours
+        }
+        newDates &lt;&lt; newDate
+    }
+    return newDates[0] == newDates[1]
+}
+
+println compareDatesInDiffTz('2021-10-30 12:33:20.255091+10', '2021-10-30 02:33:20.255091+00')
+println compareDatesInDiffTz('2021-10-30 12:33:20.255091+10', '2021-10-30 12:33:20.255091+00')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above code should print the below output</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">mo@localhost&gt; groovy ./sql-date-issue.groovy
+
+true
+false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you replace the <code>return</code> keyword with <code>assert</code>, then the output should look like below.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://onecompiler.com/groovy/3xg23mzzm">Play with it now!</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">mo@localhost&gt; groovy ./sql-date-issue.groovy
+Caught: Assertion failed:
+
+assert newDates[0] == newDates[1]
+       |       |   |  |       |
+       |       |   |  |       Sat Oct 30 12:33:20 AEDT 2021
+       |       |   |  [Sat Oct 30 02:33:20 AEDT 2021, Sat Oct 30 12:33:20 AEDT 2021]
+       |       |   false
+       |       Sat Oct 30 02:33:20 AEDT 2021
+       [Sat Oct 30 02:33:20 AEDT 2021, Sat Oct 30 12:33:20 AEDT 2021]
+
+Assertion failed:
+
+assert newDates[0] == newDates[1]
+       |       |   |  |       |
+       |       |   |  |       Sat Oct 30 12:33:20 AEDT 2021
+       |       |   |  [Sat Oct 30 02:33:20 AEDT 2021, Sat Oct 30 12:33:20 AEDT 2021]
+       |       |   false
+       |       Sat Oct 30 02:33:20 AEDT 2021
+       [Sat Oct 30 02:33:20 AEDT 2021, Sat Oct 30 12:33:20 AEDT 2021]
+
+        at sql-date-issue.compareDatesInDiffTz(sql-date-issue.groovy:20)
+        at sql-date-issue.run(sql-date-issue.groovy:24)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2021-10-31 09:15:11 UTC
+</div>
+</div>
+</body>
+</html>
