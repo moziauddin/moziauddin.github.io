@@ -6,7 +6,7 @@
 
 = About
 :stylesheet: styles.css
-:stylesdir: css
+:stylesdir: ../css
 :toc: left
 :toc-title: Jump to Section
 :icons: font
