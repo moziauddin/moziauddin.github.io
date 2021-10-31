@@ -202,18 +202,23 @@ I am discarding the millisecond part of the string as it causes an issue with th
 <div class="content">
 <pre class="highlight"><code class="language-groovy" data-lang="groovy">Boolean compareDatesInDiffTz(String d1, String d2) {
     newDates = []
+    // Add dates to a list
     List dates = [].plus(d1).plus(d2)
-    // dates &lt;&lt; d1
-    // dates &lt;&lt; d2
+    // Assert size to be correct size
     assert dates.size() == 2
     dates.each {
-        offset = it.split('\\+')[1]
-        def date = Date.parse("yyyy-MM-dd HH:mm:ss", it)
-        use( groovy.time.TimeCategory ) {
-            newDate = date - offset.toInteger().hours
-        }
-        newDates &lt;&lt; newDate
+      // Get offset from the end of string
+      offset = it.split('\\+')[1]
+      // Create new date from pattern string
+      def date = Date.parse("yyyy-MM-dd HH:mm:ss", it)
+      use( groovy.time.TimeCategory ) {
+        // Remove offset hours from the date
+        newDate = date - offset.toInteger().hours
+      }
+      // Add date to dates list
+      newDates &lt;&lt; newDate
     }
+    // Return the comparison as boolean
     return newDates[0] == newDates[1]
 }
 
@@ -281,7 +286,7 @@ assert newDates[0] == newDates[1]
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-10-31 10:01:35 UTC
+Last updated 2021-10-31 10:05:40 UTC
 </div>
 </div>
 </body>
