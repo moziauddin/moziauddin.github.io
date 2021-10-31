@@ -117,9 +117,10 @@ link:https://onecompiler.com/groovy/3xg23mzzm[Try The Function Out on OneCompile
 ----
 Boolean compareDatesInDiffTz(String d1, String d2) {
     newDates = []
-    List dates = []
-    dates << d1 
-    dates << d2
+    List dates = [].plus(d1).plus(d2)
+    // dates << d1
+    // dates << d2
+    assert dates.size() == 2
     dates.each {
         offset = it.split('\\+')[1]
         def date = Date.parse("yyyy-MM-dd HH:mm:ss", it)

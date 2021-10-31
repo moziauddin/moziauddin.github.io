@@ -202,9 +202,10 @@ I am discarding the millisecond part of the string as it causes an issue with th
 <div class="content">
 <pre class="highlight"><code class="language-groovy" data-lang="groovy">Boolean compareDatesInDiffTz(String d1, String d2) {
     newDates = []
-    List dates = []
-    dates &lt;&lt; d1
-    dates &lt;&lt; d2
+    List dates = [].plus(d1).plus(d2)
+    // dates &lt;&lt; d1
+    // dates &lt;&lt; d2
+    assert dates.size() == 2
     dates.each {
         offset = it.split('\\+')[1]
         def date = Date.parse("yyyy-MM-dd HH:mm:ss", it)
@@ -280,7 +281,7 @@ assert newDates[0] == newDates[1]
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-10-31 09:36:31 UTC
+Last updated 2021-10-31 10:01:35 UTC
 </div>
 </div>
 </body>
