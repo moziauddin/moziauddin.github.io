@@ -21,6 +21,8 @@ include::header.ad[]
 
 == Groovy
 
+<<groovy/sql-date-comparison.ad#,Comparing PostgreSQL hstore Timestamps From Different Timezones Using Groovy>>
+
 == Java
 
 == Jenkins
