@@ -4,7 +4,7 @@
 
 ////
 
-= About
+= Groovy Tutorials
 :stylesheet: styles.css
 :stylesdir: ../css
 :toc: left
@@ -109,6 +109,8 @@ We can use the above code to build a function that either:
 - asserts the two dates are same [OR]
 - Returns a boolean result of comparison
 
+==== As a Function
+
 link:https://onecompiler.com/groovy/3xg23mzzm[Try The Function Out on OneCompiler]
 
 [source,groovy]
@@ -143,6 +145,8 @@ true
 false
 ----
 
+==== Trying Out Assert Statement
+
 If you replace the `return` keyword with `assert`, then the output should look like below.
 
 link:https://onecompiler.com/groovy/3xg23mzzm[Play with it now!]
@@ -173,3 +177,7 @@ assert newDates[0] == newDates[1]
         at sql-date-issue.compareDatesInDiffTz(sql-date-issue.groovy:20)
         at sql-date-issue.run(sql-date-issue.groovy:24)
 ----
+
+=== Conclusion
+
+So, we can use the above groovy function to compare SQL datestamps for similarity.
