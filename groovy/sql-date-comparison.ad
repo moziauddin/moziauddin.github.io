@@ -11,7 +11,7 @@
 :toc-title: Jump to Section
 :icons: font
 
-include::../header.ad[]
+include::../blog-header.ad[]
 
 == Comparing PostgreSQL hstore Timestamps From Different Timezones Using Groovy
 
