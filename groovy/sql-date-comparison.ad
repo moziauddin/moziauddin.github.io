@@ -117,18 +117,23 @@ link:https://onecompiler.com/groovy/3xg23mzzm[Try The Function Out on OneCompile
 ----
 Boolean compareDatesInDiffTz(String d1, String d2) {
     newDates = []
+    // Add dates to a list
     List dates = [].plus(d1).plus(d2)
-    // dates << d1
-    // dates << d2
+    // Assert size to be correct size
     assert dates.size() == 2
     dates.each {
-        offset = it.split('\\+')[1]
-        def date = Date.parse("yyyy-MM-dd HH:mm:ss", it)
-        use( groovy.time.TimeCategory ) {
-            newDate = date - offset.toInteger().hours
-        }
-        newDates << newDate
+      // Get offset from the end of string
+      offset = it.split('\\+')[1]
+      // Create new date from pattern string
+      def date = Date.parse("yyyy-MM-dd HH:mm:ss", it)
+      use( groovy.time.TimeCategory ) {
+        // Remove offset hours from the date
+        newDate = date - offset.toInteger().hours
+      }
+      // Add date to dates list
+      newDates << newDate
     }
+    // Return the comparison as boolean
     return newDates[0] == newDates[1]
 }
 
