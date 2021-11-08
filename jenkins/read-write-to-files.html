@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.16">
+<title>Groovy Tutorials</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Groovy Tutorials</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Persist Data Between Jobs in Jenkins</div>
+<ul class="sectlevel1">
+<li><a href="#_persist_data_between_jobs_in_jenkins">Persist Data Between Jobs in Jenkins</a>
+<ul class="sectlevel2">
+<li><a href="#_reading_and_writing_to_files_in_jenkins_job">Reading and Writing to files in jenkins job</a></li>
+<li><a href="#_putting_it_together">Putting it Together</a></li>
+<li><a href="#_adding_and_deleting_from_the_file">Adding and Deleting from the file</a></li>
+</ul>
+</li>
+<li><a href="#_conclusion">Conclusion</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><a href="../about.html">Home <span class="icon"><i class="fa fa-home"></i></span></a></th>
+<th class="tableblock halign-left valign-top"><a href="../index.html">Blog <span class="icon"><i class="fa fa-university"></i></span></a></th>
+<th class="tableblock halign-left valign-top"><a href="../contact.html">Contact <span class="icon"><i class="fa fa-phone"></i></span></a></th>
+</tr>
+</thead>
+</table>
+<div class="paragraph right text-center">
+<p><span class="icon Maroon"><i class="fa fa-snowflake-o fa-5x"></i></span></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_persist_data_between_jobs_in_jenkins">Persist Data Between Jobs in Jenkins</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sometimes you would want to persist data in Jenkins in the following scenarios.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Persist data between two different Jenkins jobs</p>
+</li>
+<li>
+<p>Persist data between two builds of the same job</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>In such scenarios the best approach is to use files to persiste data. We can use a file to:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>store key value pairs</p>
+</li>
+<li>
+<p>edit the values of existing properties</p>
+</li>
+<li>
+<p>add new properties</p>
+</li>
+<li>
+<p>delete existing properties</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_reading_and_writing_to_files_in_jenkins_job">Reading and Writing to files in jenkins job</h3>
+<div class="paragraph">
+<p>Jenkins provides the following functions to work with files.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>readFile</code></p>
+</li>
+<li>
+<p><code>writeFile</code></p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_reading_a_file">Reading a File</h4>
+<div class="paragraph">
+<p>In a jenkins pipeline, we can use the following code as a stage to read a file. the below code reads a file called <code>variables.txt</code> from the current workspace.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">node {
+    stage('read file contents') {
+        println readFile(file: 'variables.txt')
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_writing_to_a_file">Writing to a File</h4>
+<div class="paragraph">
+<p>You can use the below snippet to write the text <code>myVar:value</code> to a file named <code>variables.txt</code>. The below snippet does not append to the existing contents, but overrides the contents of the file.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">node {
+    stage('read file contents') {
+        writeFile(file: 'variables.txt', text: 'myVar:value')
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_putting_it_together">Putting it Together</h3>
+<div class="paragraph">
+<p>The below code can be copied to a Jenkins pipeline and run. It will:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>create a new file in <code>/tmp/</code> directory called <code>hello.txt</code></p>
+</li>
+<li>
+<p>write a line to it</p>
+</li>
+<li>
+<p>read the contents of the file</p>
+</li>
+<li>
+<p>print to the standard output</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">node {
+    def fileName = "/tmp/hello.txt"
+    stage('Preparation') {
+        sh 'pwd &amp; rm -rf *'
+    }
+
+    stage('write to file') {
+        writeFile(file: fileName, text: "myvar:hello", encoding: "UTF-8")
+    }
+
+    stage('read file contents') {
+        println readFile(file: fileName)
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_adding_and_deleting_from_the_file">Adding and Deleting from the file</h3>
+<div class="paragraph">
+<p>To add a property, we can use the below code.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">node {
+    def fileName = "/tmp/hello.txt"
+    stage('Preparation') {
+        sh 'pwd &amp; rm -rf *'
+    }
+
+    stage('Add property 1') {
+        if (fileExists(fileName)) {
+            existingContents = readFile(fileName)
+        }
+        newProperty = "newvar:newValue"
+        writeFile(file: fileName, text: existingContents + "\n" + newProperty)
+        println readFile(file: fileName)
+    }
+
+    stage('Add property 2') {
+        if (fileExists(fileName)) {
+            existingContents = readFile(fileName)
+        }
+        newProperty = "vaar3:vaar3value"
+        writeFile(file: fileName, text: existingContents + "\n" + newProperty)
+        println readFile(file: fileName)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, a working example of all ways to change the properties and treat this file as a flat file database is as follows.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">node {
+    def fileName = "/tmp/hello.txt"
+    stage('Preparation') {
+        sh 'pwd &amp; rm -rf *'
+    }
+
+    stage('write to file') {
+        writeFile(file: fileName, text: "myvar:hello", encoding: "UTF-8")
+    }
+
+    stage('read file contents') {
+        println readFile(file: fileName)
+    }
+
+    stage('Add property 1') {
+        if (fileExists(fileName)) {
+            existingContents = readFile(fileName)
+        }
+        newProperty = "newvar:newValue"
+        writeFile(file: fileName, text: existingContents + "\n" + newProperty)
+        println readFile(file: fileName)
+    }
+
+    stage('Add property 2') {
+        if (fileExists(fileName)) {
+            existingContents = readFile(fileName)
+        }
+        newProperty = "vaar3:vaar3value"
+        writeFile(file: fileName, text: existingContents + "\n" + newProperty)
+        println readFile(file: fileName)
+    }
+
+    stage('get property'){
+        def lines = readFile(file: fileName)
+        def value = ''
+        for (line in lines.split("\n")) {
+            if (line.contains('newvar')) {
+                value = line.split(':')[1]
+            }
+        }
+        println "Value of newvar is: $value"
+    }
+
+    stage('Add property 2') {
+        if (fileExists(fileName)) {
+            existingContents = readFile(fileName)
+        }
+        newProperty = "vaar3:vaar3value"
+        writeFile(file: fileName, text: existingContents + "\n" + newProperty)
+        println readFile(file: fileName)
+    }
+
+    stage('update property'){
+        def lines = readFile(file: fileName)
+        def newValue = 'blah'
+        def keyValue = 'newvar'
+        def newContents = ''
+        for (line in lines.split("\n")) {
+            if (line.contains(keyValue)) {
+                newContents += keyValue + ':' + newValue + '\n'
+            } else {
+                newContents += line + "\n"
+            }
+        }
+        writeFile(file: fileName, text: newContents)
+        println readFile(file: fileName)
+    }
+
+    stage('Delete property') {
+        // check file exists
+        def lines = readFile(file: fileName)
+        def newContents = ''
+        for (line in lines.split("\n")) {
+            if (line.contains('newvar')) {
+                continue
+            } else {
+                newContents += line + "\n"
+            }
+        }
+        writeFile(file: fileName, text: newContents)
+        println readFile(file: fileName)
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We can use a flat file to persist data in jenkins using this simple example.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2021-11-08 09:38:36 UTC
+</div>
+</div>
+</body>
+</html>
