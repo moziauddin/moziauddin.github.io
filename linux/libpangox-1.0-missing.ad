@@ -1,0 +1,69 @@
+////
+ file: about.ad
+ author: Mo Ziauddin
+
+////
+
+
+= Linux Tutorials
+
+:stylesheet: styles.css
+:stylesdir: ../css
+:toc: left
+:toc-title: Libpangox-1.0 is missing in Fedora 34
+:icons: font
+
+include::../blog-header.ad[]
+
+== Solved: Libpangox-1.0 is missing in Fedora 34
+
+== Missing Library Libpangox-1.0.so while installing applicatios
+
+While installing Anydesk, I get the following error meesage on Fedora 34
+
+[source,bash]
+----
+Error: 
+ Problem: conflicting requests
+  - nothing provides libpangox-1.0.so.0()(64bit) needed by anydesk-6.1.1-1.x86_64
+(try to add '--skip-broken' to skip uninstallable packages)
+----
+
+My workstation is as Fedora 34.
+
+[source,bash]
+----
+[root@localhost yum.repos.d]# cat /etc/*release
+Fedora release 34 (Thirty Four)
+NAME=Fedora
+VERSION="34 (Workstation Edition)"
+ID=fedora
+VERSION_ID=34
+VERSION_CODENAME=""
+PLATFORM_ID="platform:f34"
+PRETTY_NAME="Fedora 34 (Workstation Edition)"
+ANSI_COLOR="0;38;2;60;110;180"
+LOGO=fedora-logo-icon
+CPE_NAME="cpe:/o:fedoraproject:fedora:34"
+HOME_URL="https://fedoraproject.org/"
+DOCUMENTATION_URL="https://docs.fedoraproject.org/en-US/fedora/f34/system-administrators-guide/"
+SUPPORT_URL="https://fedoraproject.org/wiki/Communicating_and_getting_help"
+BUG_REPORT_URL="https://bugzilla.redhat.com/"
+REDHAT_BUGZILLA_PRODUCT="Fedora"
+REDHAT_BUGZILLA_PRODUCT_VERSION=34
+REDHAT_SUPPORT_PRODUCT="Fedora"
+REDHAT_SUPPORT_PRODUCT_VERSION=34
+PRIVACY_POLICY_URL="https://fedoraproject.org/wiki/Legal:PrivacyPolicy"
+VARIANT="Workstation Edition"
+VARIANT_ID=workstation
+Fedora release 34 (Thirty Four)
+Fedora release 34 (Thirty Four)
+----
+
+The library has been discontinued but the older version of the library for Fedora 31 still works.
+
+I downlaoded the rpm installer file from link:https://kojipkgs.fedoraproject.org//packages/pangox-compat/0.0.2/15.fc31/x86_64/[here]
+
+== Conclusion
+
+If any applications are failing to install on Fedora or yum based Linux distrubution, then use the above link to intall the library.

@@ -166,15 +166,6 @@ node {
         println "Value of newvar is: $value"
     }
     
-    stage('Add property 2') {
-        if (fileExists(fileName)) {
-            existingContents = readFile(fileName)
-        }
-        newProperty = "vaar3:vaar3value"
-        writeFile(file: fileName, text: existingContents + "\n" + newProperty)
-        println readFile(file: fileName)
-    }
-    
     stage('update property'){
         def lines = readFile(file: fileName)
         def newValue = 'blah'

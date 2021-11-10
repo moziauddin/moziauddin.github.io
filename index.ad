@@ -27,7 +27,13 @@ include::header.ad[]
 
 == Jenkins
 
+<<jenkins/read-write-to-files.ad#,Persist Data Between Jobs in Jenkins>>
+
 == Bash
+
+== Linux
+
+<<linux/libpangox-1.0-missing.ad#,Solved: Libpangox-1.0 is missing in Fedora 34>>
 
 [.center.text-center]
 include::footer.ad[]
