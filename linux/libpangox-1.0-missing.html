@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.16">
+<title>Linux Tutorials</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>Linux Tutorials</h1>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><a href="../about.html">Home <span class="icon"><i class="fa fa-home"></i></span></a></th>
+<th class="tableblock halign-left valign-top"><a href="../index.html">Blog <span class="icon"><i class="fa fa-university"></i></span></a></th>
+<th class="tableblock halign-left valign-top"><a href="../contact.html">Contact <span class="icon"><i class="fa fa-phone"></i></span></a></th>
+</tr>
+</thead>
+</table>
+<div class="paragraph right text-center">
+<p><span class="icon Maroon"><i class="fa fa-snowflake-o fa-5x"></i></span></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solved_libpangox_1_0_is_missing_in_fedora_34">Solved: Libpangox-1.0 is missing in Fedora 34</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_missing_library_libpangox_1_0_so_while_installing_applicatios">Missing Library Libpangox-1.0.so while installing applicatios</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>While installing Anydesk, I get the following error meesage on Fedora 34</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">Error:
+ Problem: conflicting requests
+  - nothing provides libpangox-1.0.so.0()(64bit) needed by anydesk-6.1.1-1.x86_64
+(try to add '--skip-broken' to skip uninstallable packages)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>My workstation is as Fedora 34.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">[root@localhost yum.repos.d]# cat /etc/*release
+Fedora release 34 (Thirty Four)
+NAME=Fedora
+VERSION="34 (Workstation Edition)"
+ID=fedora
+VERSION_ID=34
+VERSION_CODENAME=""
+PLATFORM_ID="platform:f34"
+PRETTY_NAME="Fedora 34 (Workstation Edition)"
+ANSI_COLOR="0;38;2;60;110;180"
+LOGO=fedora-logo-icon
+CPE_NAME="cpe:/o:fedoraproject:fedora:34"
+HOME_URL="https://fedoraproject.org/"
+DOCUMENTATION_URL="https://docs.fedoraproject.org/en-US/fedora/f34/system-administrators-guide/"
+SUPPORT_URL="https://fedoraproject.org/wiki/Communicating_and_getting_help"
+BUG_REPORT_URL="https://bugzilla.redhat.com/"
+REDHAT_BUGZILLA_PRODUCT="Fedora"
+REDHAT_BUGZILLA_PRODUCT_VERSION=34
+REDHAT_SUPPORT_PRODUCT="Fedora"
+REDHAT_SUPPORT_PRODUCT_VERSION=34
+PRIVACY_POLICY_URL="https://fedoraproject.org/wiki/Legal:PrivacyPolicy"
+VARIANT="Workstation Edition"
+VARIANT_ID=workstation
+Fedora release 34 (Thirty Four)
+Fedora release 34 (Thirty Four)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The library has been discontinued but the older version of the library for Fedora 31 still works.</p>
+</div>
+<div class="paragraph">
+<p>I downlaoded the rpm installer file from <a href="https://kojipkgs.fedoraproject.org//packages/pangox-compat/0.0.2/15.fc31/x86_64/">here</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If any applications are failing to install on Fedora or yum based Linux distrubution, then use the above link to intall the library.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2021-11-10 06:47:23 UTC
+</div>
+</div>
+</body>
+</html>

@@ -250,15 +250,6 @@
         println "Value of newvar is: $value"
     }
 
-    stage('Add property 2') {
-        if (fileExists(fileName)) {
-            existingContents = readFile(fileName)
-        }
-        newProperty = "vaar3:vaar3value"
-        writeFile(file: fileName, text: existingContents + "\n" + newProperty)
-        println readFile(file: fileName)
-    }
-
     stage('update property'){
         def lines = readFile(file: fileName)
         def newValue = 'blah'
@@ -306,7 +297,7 @@
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-11-08 09:38:36 UTC
+Last updated 2021-11-10 06:47:23 UTC
 </div>
 </div>
 </body>
