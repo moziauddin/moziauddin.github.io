@@ -1,5 +1,5 @@
 ////
- file: about.ad
+ file: linux/libpangox-1.0-missing.ad
  author: Mo Ziauddin
 
 ////
@@ -10,7 +10,7 @@
 :stylesheet: styles.css
 :stylesdir: ../css
 :toc: left
-:toc-title: Libpangox-1.0 is missing in Fedora 34
+:toc-title: Fedora 34 - Libpangox-1 is missing
 :icons: font
 
 include::../blog-header.ad[]
