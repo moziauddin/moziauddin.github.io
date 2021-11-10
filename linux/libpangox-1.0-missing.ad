@@ -10,7 +10,7 @@
 :stylesheet: styles.css
 :stylesdir: ../css
 :toc: left
-:toc-title: Fedora 34 - Libpangox-1 is missing
+:toc-title: Fedora 34 Libpangox is missing
 :icons: font
 
 include::../blog-header.ad[]
