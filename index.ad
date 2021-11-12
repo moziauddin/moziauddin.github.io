@@ -8,30 +8,38 @@
 :stylesheet: styles.css
 :stylesdir: css
 :toc: left
-:toc-title: Categories
+:toc-title: Blog Categories
 :icons: font
 
 include::header.ad[]
 
-== Grails
+== Topics
 
-== Micronaut
+=== Grails
 
-== Python
+=== Micronaut
 
-== Groovy
+=== Python
+
+=== Groovy
 
 <<groovy/sql-date-comparison.ad#,Comparing PostgreSQL hstore Timestamps From Different Timezones Using Groovy>>
 
-== Java
+=== Java
 
-== Jenkins
+=== Terraform
+
+<<terraform/provider-version-error.ad#,Solved: Terraform Failed to query available provider packages>>
+
+<<terraform/adding-a-new-terragrunt-module.ad#,Solved: Adding a new Module in Terrafrom or Terragrunt>>
+
+=== Jenkins
 
 <<jenkins/read-write-to-files.ad#,Persist Data Between Jobs in Jenkins>>
 
-== Bash
+=== Bash
 
-== Linux
+=== Linux
 
 <<linux/libpangox-1.0-missing.ad#,Solved: Libpangox-1.0 is missing in Fedora 34>>
 
