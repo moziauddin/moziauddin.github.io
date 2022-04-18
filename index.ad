@@ -15,6 +15,12 @@ include::header.ad[]
 
 == Topics
 
+=== Cloud
+
+==== AWS
+
+<<cloud/delete-snapshots-from-aws.ad#,Delete snapshots tagged to delete on certain date>>
+
 === Grails
 
 === Micronaut
