@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.17">
+<title>Delete Snapshots from AWS by filtering on a tag</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>Delete Snapshots from AWS by filtering on a tag</h1>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can back up the data on your Amazon EBS volumes to Amazon S3 by taking point-in-time snapshots. Snapshots are incremental backups, which means that only the blocks on the device that have changed after your most recent snapshot are saved. This minimizes the time required to create the snapshot and saves on storage costs by not duplicating data. Each snapshot contains all of the information that is needed to restore your data (from the moment when the snapshot was taken) to a new EBS volume.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prerequisite_tasks_before_you_run_the_script">Prerequisite tasks before you run the script</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_get_jq">Get jq</h3>
+<div class="paragraph">
+<p>Install jq by following the instructions <a href="https://stedolan.github.io/jq/download/">here</a></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>You can test if you have jq by typing <code>jq --help</code> in terminal</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_get_aws_cli">Get aws cli</h3>
+<div class="paragraph">
+<p>Install the version of AWS cli for your OS by following instructions <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">here</a></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>You can test if you have aws by typing <code>aws help</code> in terminal</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_setup_aws_permissions_to_the_device_running_the_script">Setup aws permissions to the device running the script</h3>
+<div class="paragraph">
+<p>The device running this script will need to have appropriate permissions to delete the snapshot. To setup an IAM role, please follow the instructions <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-prereqs.html">here</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_script">The script</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_with_one_argument">With one argument</h3>
+<div class="paragraph">
+<p>Direct link to <a href="https://raw.githubusercontent.com/moziauddin/shared/master/cloud/aws/delete-snapshots-by-tag.sh">file</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">#!/bin/bash
+# Dependencies:
+# Install jq
+# Assign permissions to the instance running the script
+#   1. Using IAM role (preferred)
+#   2. Using AWS Key and Shared Secret in .aws/.credentials
+
+if [[ -z $1 ]]; then
+	echo ""
+	echo " ERROR: Please pass the filter string as first argument"
+	echo "    Example: ./delete-old-snapshots.sh '2021-01-*'"
+        echo "    to delete all snapshots matching deleteOn date of Jan 2021"
+	echo ""
+	exit 1
+fi
+
+echo "PROCEED WITH CAUTION!!"
+echo "Once deleted, snapshots cannot be recovered"
+echo "UNCOMMENT line 29 to actually delete"
+snap_ids=$(aws ec2 describe-snapshots --filters Name=tag:DeleteOn,Values=$1 | jq .Snapshots[].SnapshotId)
+matched=$(echo $snap_ids | wc -w)
+echo "Matched Snapshots: "$matched
+
+if [[ $matched -ne 0 ]]; then
+    for id in $snap_ids;
+    do
+        new_id=$(echo $id | sed -e s/\"//g)
+        echo "deleteing $new_id"
+        # aws ec2 delete-snapshot --snapshot-id $new_id
+    done
+    echo "Successfully removed $matched snapshots"
+else
+    echo "No Snapshots to delete"
+fi</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_with_two_arguments">With two arguments</h3>
+<div class="paragraph">
+<p>Direct link to <a href="https://raw.githubusercontent.com/moziauddin/shared/master/cloud/aws/delete-snapshots-by-filter.sh">file</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">#!/bin/bash
+# Dependencies:
+# Install jq
+# Assign permissions to the instance running the script
+#   1. Using IAM role (preferred)
+#   2. Using AWS Key and Shared Secret in .aws/.credentials
+
+if [[ -z $1 &amp;&amp; -z $2 ]]; then
+	echo ""
+	echo " ERROR: Please pass the filter attribute as first argument and its value as second with wild card"
+	echo "    Example: ./delete-old-snapshots.sh 'start-time' '2016*'"
+        echo "    to delete all snapshots matching deleteOn date of Jan 2021"
+	echo ""
+	exit 1
+fi
+echo "Proceed with caution!"
+echo "Once deleted, snapshots cannot be recovered"
+echo "UNCOMMENT line 28 to actually delete"
+snap_ids=$(aws ec2 describe-snapshots --filters Name=$1,Values=$2 | jq .Snapshots[].SnapshotId)
+matched=$(echo $snap_ids | wc -w)
+echo "Matched Snapshots: "$matched
+
+if [[ $matched -ne 0 ]]; then
+    for id in $snap_ids;
+    do
+        new_id=$(echo $id | sed -e s/\"//g)
+        echo "deleteing $new_id"
+        # aws ec2 delete-snapshot --snapshot-id $new_id
+    done
+else
+    echo "No Snapshots to delete"
+fi</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2022-04-18 22:57:47 UTC
+</div>
+</div>
+</body>
+</html>
