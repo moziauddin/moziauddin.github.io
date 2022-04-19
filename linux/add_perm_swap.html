@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.17">
+<title>Solved: Add Permanant Swap to Ubuntu 20.04</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_solved_add_permanant_swap_to_ubuntu_20_04">Solved: Add Permanant Swap to Ubuntu 20.04</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_1_add_permanent_swap_of_8gb">1. Add permanent swap of 8GB</h3>
+<div class="sect3">
+<h4 id="_create_swap_file">Create swap file</h4>
+<div class="paragraph">
+<p><code>sudo fallocate -l 8G /swapfile</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_change_permissions">Change Permissions</h4>
+<div class="paragraph">
+<p><code>sudo chmod 600 /swapfile</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mark_the_file_as_swap_space">Mark the file as swap space</h4>
+<div class="paragraph">
+<p><code>sudo mkswap /swapfile</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_enable_the_swap_file_allowing_our_system_to_start_utilizing_it">enable the swap file, allowing our system to start utilizing it</h4>
+<div class="paragraph">
+<p><code>sudo swapon /swapfile</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_that_the_swap_is_available">Verify that the swap is available</h4>
+<div class="paragraph">
+<p><code>sudo swapon --show</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_check_memory_for_the_server">Check Memory for the server</h4>
+<div class="paragraph">
+<p><code>free -h</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_backup_fstab_file_before_modifying">Backup fstab file before modifying</h4>
+<div class="paragraph">
+<p><code>sudo cp /etc/fstab /etc/fstab.bak-21</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_add_a_line_to_fstab_to_make_swap_permanant">Add a line to fstab to make swap permanant</h4>
+<div class="paragraph">
+<p><code>echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_print_the_fstab_file_contents">Print the fstab file contents</h4>
+<div class="paragraph">
+<p><code>sudo cat /etc/fstab</code></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_check_swap">2. Check Swap</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Restart the server</p>
+</li>
+<li>
+<p>Run the following command <code>free -h</code></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2022-04-19 03:10:14 UTC
+</div>
+</div>
+</body>
+</html>
