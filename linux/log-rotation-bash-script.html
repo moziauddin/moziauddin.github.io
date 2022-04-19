@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.17">
+<title>Solved: Simple bash script to rotate logs</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_solved_simple_bash_script_to_rotate_logs">Solved: Simple bash script to rotate logs</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_background">Background</h3>
+<div class="paragraph">
+<p>I have a micronaut application that writes logs to <code>STDOUT</code>. I can access the logs from journalctl using the below command</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"># if the name of the application is "app", then
+journalctl -f -u app
+# should filter the journal output by that service</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But, this is not sustainable in the long run if we need to access logs form a few days ago. So I wanted to redirect the logs to a file and write my own script to roll over the logs.</p>
+</div>
+<div class="paragraph">
+<p>So, I changed the service to write to it&#8217;s own log file instead of writing to the <code>STDOUT</code>. I wrote the simple script below to accomplish the same.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_bash_script">bash script</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">#!/bin/bash
+app_name=app
+today=$(date "+%Y-%m-%d")
+lines=$(wc -l $HOME/logs/$app_name.log | awk '{print $1}')
+
+if [[ -z $lines ]]; then
+    echo "$today: Empty Log File"
+    echo "Nothing in log for $today" &gt; $HOME/logs/$app_name-$today.log
+else
+    echo "$today: Rotating logs"
+    cd $HOME/logs
+    cp $app_name.log $app_name-$today.log
+    zip $today.zip $app_name-$today.log
+    rm -f $app_name-$today.log
+    echo "" &gt; $app_name.log
+fi</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>I run this script on cron as below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cron" data-lang="cron">59 23 * * * /app_files/scripts/rotate-logs.sh &gt;&gt; /app_files/logs/cron.log</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conclusion">Conclusion</h3>
+<div class="paragraph">
+<p>You can very easily implement this in your own application or just use is as a bash script to rotate continuous log files like <code>Catalina.out</code>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2022-04-19 03:40:17 UTC
+</div>
+</div>
+</body>
+</html>

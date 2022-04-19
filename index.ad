@@ -2,6 +2,11 @@
  file: index.ad
  author: Mo Ziauddin
 
+=== Grails
+=== Micronaut
+=== Python
+=== Groovy
+=== Java
 ////
 
 = Welcome to Mo's blog
@@ -21,17 +26,7 @@ include::header.ad[]
 
 <<cloud/delete-snapshots-from-aws.ad#,Delete snapshots tagged to delete on certain date>>
 
-=== Grails
-
-=== Micronaut
-
-=== Python
-
-=== Groovy
-
 <<groovy/sql-date-comparison.ad#,Comparing PostgreSQL hstore Timestamps From Different Timezones Using Groovy>>
-
-=== Java
 
 === Terraform
 
@@ -43,13 +38,15 @@ include::header.ad[]
 
 <<jenkins/read-write-to-files.ad#,Persist Data Between Jobs in Jenkins>>
 
-=== Bash
-
 === Linux
 
 <<linux/add_perm_swap.ad#,Solved: Add Permanant Swap to Ubuntu 20.04>>
 
 <<linux/libpangox-1.0-missing.ad#,Solved: Libpangox-1.0 is missing in Fedora 34>>
+
+==== Bash
+
+<<linux/log-rotation-bash-script.ad#,Solved: Simple bash script to rotate logs>>
 
 [.center.text-center]
 include::footer.ad[]
