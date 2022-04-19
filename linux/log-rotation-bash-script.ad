@@ -1,0 +1,49 @@
+== Solved: Simple bash script to rotate logs
+
+=== Background
+
+I have a micronaut application that writes logs to `STDOUT`. I can access the logs from journalctl using the below command
+
+[source,bash]
+----
+# if the name of the application is "app", then
+journalctl -f -u app
+# should filter the journal output by that service
+----
+
+But, this is not sustainable in the long run if we need to access logs form a few days ago. So I wanted to redirect the logs to a file and write my own script to roll over the logs.
+
+So, I changed the service to write to it's own log file instead of writing to the `STDOUT`. I wrote the simple script below to accomplish the same.
+
+=== bash script
+
+[source,bash]
+----
+#!/bin/bash
+app_name=app
+today=$(date "+%Y-%m-%d")
+lines=$(wc -l $HOME/logs/$app_name.log | awk '{print $1}')
+
+if [[ -z $lines ]]; then
+    echo "$today: Empty Log File"
+    echo "Nothing in log for $today" > $HOME/logs/$app_name-$today.log
+else
+    echo "$today: Rotating logs"
+    cd $HOME/logs
+    cp $app_name.log $app_name-$today.log
+    zip $today.zip $app_name-$today.log
+    rm -f $app_name-$today.log
+    echo "" > $app_name.log
+fi
+----
+
+I run this script on cron as below.
+
+[source,cron]
+----
+59 23 * * * /app_files/scripts/rotate-logs.sh >> /app_files/logs/cron.log
+----
+
+=== Conclusion
+
+You can very easily implement this in your own application or just use is as a bash script to rotate continuous log files like `Catalina.out`.
