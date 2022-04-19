@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.17">
+<title>Convert TSV file to CSV</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_convert_tsv_file_to_csv">Convert TSV file to CSV</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_background">Background</h3>
+<div class="paragraph">
+<p>Sometimes we would like to convert <code>.tsv</code> files to <code>.csv</code> for convinience or any other use case. You can use the below python script to accomplish the task.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">import sys, os
+import pandas as pd
+
+if(len(sys.argv) != 2):
+    print "Incorrect number of args. \nPlease Pass file name to convert to CSV.\n"
+    exit(1)
+tsv_file = sys.argv[1]
+
+if(not os.path.exists(tsv_file)):
+    print "File does not exist. File name: " + tsv_file + "\n"
+    exit(1)
+
+print "Converting File: " + tsv_file
+csv_table=pd.read_csv(tsv_file,sep='\t')
+csv_table.to_csv(tsv_file+".csv",index=False)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_usage">Usage</h3>
+<div class="paragraph">
+<p>If the above code is saved as a file called <code>tsv-csv.py</code>, then we can use the below command to convert a file.</p>
+</div>
+<div class="paragraph">
+<p><code>python tsv-csv.py some_file.tsv</code></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conclusion">Conclusion</h3>
+<div class="paragraph">
+<p>You can now convert <code>tsv</code> files to <code>csv</code> with ease.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2022-04-19 05:21:17 UTC
+</div>
+</div>
+</body>
+</html>
