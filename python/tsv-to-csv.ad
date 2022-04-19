@@ -1,0 +1,34 @@
+== Convert TSV file to CSV
+
+=== Background
+
+Sometimes we would like to convert `.tsv` files to `.csv` for convinience or any other use case. You can use the below python script to accomplish the task.
+
+[source,python]
+----
+import sys, os
+import pandas as pd
+
+if(len(sys.argv) != 2):
+    print "Incorrect number of args. \nPlease Pass file name to convert to CSV.\n"
+    exit(1)
+tsv_file = sys.argv[1]
+
+if(not os.path.exists(tsv_file)):
+    print "File does not exist. File name: " + tsv_file + "\n"
+    exit(1)
+
+print "Converting File: " + tsv_file
+csv_table=pd.read_csv(tsv_file,sep='\t')
+csv_table.to_csv(tsv_file+".csv",index=False)
+----
+
+=== Usage
+
+If the above code is saved as a file called `tsv-csv.py`, then we can use the below command to convert a file.
+
+`python tsv-csv.py some_file.tsv`
+
+=== Conclusion
+
+You can now convert `tsv` files to `csv` with ease.

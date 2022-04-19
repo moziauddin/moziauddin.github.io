@@ -48,5 +48,9 @@ include::header.ad[]
 
 <<linux/log-rotation-bash-script.ad#,Solved: Simple bash script to rotate logs>>
 
+=== Python
+
+<<python/tsv-to-csv.ad#,Solved:Convert TSV files to CSV using python>>
+
 [.center.text-center]
 include::footer.ad[]
