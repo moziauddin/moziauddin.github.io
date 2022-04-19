@@ -47,6 +47,8 @@ include::header.ad[]
 
 === Linux
 
+<<linux/add_perm_swap.ad#,Solved: Add Permanant Swap to Ubuntu 20.04>>
+
 <<linux/libpangox-1.0-missing.ad#,Solved: Libpangox-1.0 is missing in Fedora 34>>
 
 [.center.text-center]
